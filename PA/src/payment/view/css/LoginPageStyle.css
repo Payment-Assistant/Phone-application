@@ -2,3 +2,22 @@
 {
     -fx-background-color: #07283d;
 }
+
+/*
+.panes{
+    -fx-background-color: #e8f4f8;
+}
+
+.topPane{
+    -fx-background-color:  #07283D;
+}
+*/
+
+.tab-pane *.tab-header-background{
+    -fx-background-color: #07283d;
+}
+
+.tab{
+    -fx-background-color: #e8f4f8;
+    -fx-padding: 0 30 0 30;
+}

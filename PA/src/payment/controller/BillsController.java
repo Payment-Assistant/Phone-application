@@ -12,11 +12,8 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import payment.model.User;
-import payment.view.BillInformationAndPayViewer;
-import payment.view.BillInformationViewer;
-import payment.view.BillsViewer;
+import payment.view.*;
 import javafx.scene.text.Text;
-import payment.view.NewBillViewer;
 
 
 public class BillsController {
@@ -201,6 +198,14 @@ public class BillsController {
         }
         catch(Exception e){
             System.out.println(e.getMessage());
+        }
+    }
+
+    public void onSettingsButtonClick(){
+        try {
+            new SettingsViewer(user).loadScene(stage);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

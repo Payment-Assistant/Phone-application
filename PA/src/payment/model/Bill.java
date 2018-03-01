@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public class Bill {
 
-    private String idOfBill;        //идентификатор счета
+    private int idOfBill;        //идентификатор счета
     private String description;     //описание счета (не больше 25 символов)
     private String nameOfSender;    //имя выставителя счета
     private Date dateOfSending;     //дата выставления
@@ -31,7 +31,7 @@ public class Bill {
         }
     }
 
-    public Bill(String idOfBill,
+    public Bill(int idOfBill,
                 String description,
                 String nameOfSender,
                 Date dateOfSending,
@@ -48,7 +48,7 @@ public class Bill {
         this.isPaid = false;
     }
 
-    public String getIdOfBill() {
+    public int getIdOfBill() {
         return idOfBill;
     }
 
@@ -96,6 +96,15 @@ public class Bill {
         builder.append("Благодарим за пользование PaymentAssistant");
 
         return builder.toString();
+    }
+
+    public static Currency getCurrency(String s) {
+        if (s.equals("USD"))
+            return Currency.USD;
+        if (s.equals("EUR"))
+            return  Currency.EUR;
+        else
+            return Currency.RUB;
     }
 
 }

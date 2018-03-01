@@ -18,13 +18,13 @@
    <children>
       <GridPane layoutX="10.0" layoutY="10.0" prefHeight="232.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Pane accessibleRole="IMAGE_VIEW" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #10cc00;" GridPane.columnSpan="3" />
+            <Pane accessibleRole="IMAGE_VIEW" prefHeight="200.0" prefWidth="200.0" stylesheets="@../css/ButtonsStyle.css" GridPane.columnSpan="3" />
             <Button fx:id="menuButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="60.0" prefWidth="137.0" stylesheets="@../css/ButtonsStyle.css" text="Меню" wrapText="false" GridPane.columnIndex="0" GridPane.rowIndex="0">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
             </Button>
-            <Button fx:id="returnButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" stylesheets="@../css/ButtonsStyle.css" text="Назад" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="2" onMouseClicked="#onReturnButtonClick" />
+            <Button fx:id="returnButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#onReturnButtonClick" stylesheets="@../css/ButtonsStyle.css" text="Назад" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.rowIndex="2" />
             <GridPane GridPane.columnSpan="2147483647" GridPane.rowIndex="1">
               <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
@@ -75,7 +75,7 @@
                         <Insets right="20.0" />
                      </GridPane.margin>
                   </TextField>
-                  <TextField fx:id="sumTextField" promptText="1000" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <TextField fx:id="sumTextField" promptText="1000" GridPane.columnIndex="1" GridPane.rowIndex="2" onKeyReleased="#handleSumEntry">
                      <GridPane.margin>
                         <Insets right="20.0" />
                      </GridPane.margin>
@@ -85,7 +85,7 @@
                         <Insets right="20.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Button fx:id="toSendButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" stylesheets="@../css/ButtonsStyle.css" text="Отправить счет" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" onMouseClicked="#onToSendBillButtonClick">
+                  <Button fx:id="toSendButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#onToSendBillButtonClick" stylesheets="@../css/ButtonsStyle.css" text="Отправить счет" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                      <GridPane.margin>
                         <Insets bottom="50.0" left="40.0" right="40.0" top="30.0" />
                      </GridPane.margin>
@@ -101,12 +101,13 @@
                       <MenuItem mnemonicParsing="false" text="EUR" />
                     </items>
                   </MenuButton>
+                  <Label fx:id="Message" textAlignment="CENTER" textFill="limegreen" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                </children>
                <GridPane.margin>
                   <Insets top="10.0" />
                </GridPane.margin>
             </GridPane>
-            <Label text="Новый счет" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Label text="Новый счет" textFill="BLACK" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -137,8 +138,8 @@
             <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Pane accessibleRole="IMAGE_VIEW" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #10cc00;" GridPane.rowIndex="5" />
-            <Pane accessibleRole="IMAGE_VIEW" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #10cc00;" />
+            <Pane accessibleRole="IMAGE_VIEW" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #e8f4f8;" GridPane.rowIndex="5" />
+            <Pane accessibleRole="IMAGE_VIEW" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #e8f4f8;" />
             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="34.0" prefWidth="160.0" stylesheets="@../css/ButtonsStyle.css" text="Счета" wrapText="false" GridPane.rowIndex="1">
                <font>
                   <Font size="20.0" fx:id="x21" />
@@ -154,7 +155,7 @@
                   <Font size="20.0" fx:id="x212" />
                </font>
             </Button>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="34.0" prefWidth="160.0" stylesheets="@../css/ButtonsStyle.css" text="Настройки" wrapText="false" GridPane.rowIndex="4">
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSettingsButtonClick" prefHeight="34.0" prefWidth="160.0" stylesheets="@../css/ButtonsStyle.css" text="Настройки" wrapText="false" GridPane.rowIndex="4">
                <font>
                   <Font size="20.0" fx:id="x213" />
                </font>
@@ -164,7 +165,7 @@
                   <Font size="20.0" fx:id="x215" />
                </font>
             </Button>
-            <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="panes" stylesheets="@../css/ButtonsStyle.css">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="70.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

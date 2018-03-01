@@ -1,5 +1,8 @@
 package payment.controller;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.Label;
@@ -11,11 +14,14 @@ import payment.model.Bill;
 import payment.model.User;
 import payment.view.BillsViewer;
 
+import java.io.*;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginPageController {
+
+    ServerConnection sc = new ServerConnection();
 
     private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
@@ -44,6 +50,12 @@ public class LoginPageController {
     }
 
     @FXML
+    public Label errorMessageL;
+    @FXML
+    public TextField PassEnterText;
+    @FXML
+    public TextField NumberEnterText;
+    @FXML
     private TextField email;
     @FXML
     private TextField phoneNumber;
@@ -69,11 +81,85 @@ public class LoginPageController {
                 && (validatePassword(repeatPassword.getText()) && repeatPassword.getText().equals(password.getText()))) {
             user = new User(name.getText(), phoneNumber.getText(), password.getText());
             if(validateEmail(email.getText())) user.changeEmail(email.getText());
-            loadNextScene();
+            try {
+                Algorithm algorithm = Algorithm.HMAC256("password");
+                String token = JWT.create()
+                        .withClaim("action","register")
+                        .withClaim("login", phoneNumber.getText())
+                        .withClaim("password",password.getText())
+                        .withClaim("name",name.getText().split(" ")[0])
+                        .withClaim("surname",name.getText().split(" ")[1])
+                        .withClaim("phone",phoneNumber.getText())
+                        .withClaim("email",email.getText())
+                        .sign(algorithm);
+
+                sc.wr = new OutputStreamWriter(sc.con.getOutputStream());
+                sc.wr.write(token);
+                sc.wr.flush();
+                sc.wr.close();
+
+                sc.in = new BufferedReader(new InputStreamReader(sc.con.getInputStream()));
+                String resp = sc.in.readLine();
+                sc.in.close();
+                DecodedJWT decodedJWT = JWT.decode(resp);
+                String ans = decodedJWT.getClaim("answer").asString();
+                if (ans.equals("success"))
+                    loadNextScene();
+                if(ans.equals("matchingLogin"))
+                    errorMessage.setText("Этот телефон уже зарегистрирован");
+            }
+            catch(UnsupportedEncodingException e){
+                System.out.println("Беда");
+            }
+            catch (IOException e){
+                System.out.println("IO beda");
+            }
+            finally {
+                System.out.println("Final беда");
+            }
         }
         else
             errorMessage.setText("Проверьте корректность введённых данных!");
 
+    }
+
+    public void handleLoginButton(MouseEvent mouseEvent) {
+
+        sc.connectToServer();
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("password");
+            String token = JWT.create()
+                    .withClaim("action", "authorize")
+                    .withClaim("login", NumberEnterText.getText())
+                    .withClaim("password", PassEnterText.getText())
+                    .sign(algorithm);
+            sc.wr = new OutputStreamWriter(sc.con.getOutputStream());
+            sc.wr.write(token);
+            sc.wr.flush();
+            sc.wr.close();
+
+            sc.in = new BufferedReader(new InputStreamReader(sc.con.getInputStream()));
+            String resp = sc.in.readLine();
+            sc.in.close();
+            DecodedJWT decodedJWT = JWT.decode(resp);
+            String ans = decodedJWT.getClaim("answer").asString();
+            if (ans.equals("true")) {
+                user = new User(decodedJWT.getClaim("name").asString()+ decodedJWT.getClaim("surname").asString(),
+                        decodedJWT.getClaim("phoneNumber").asString(), PassEnterText.getText());
+                user.addEmail(decodedJWT.getClaim("email").asString());
+                loadNextScene();
+            }
+            else
+                errorMessageL.setText("Неверно введены данные");
+
+        }
+        catch(UnsupportedEncodingException e){
+            System.out.println("Encoding beda");
+        }
+        catch(IOException e){
+            System.out.println("IO beda");
+            System.out.println(e.getMessage());
+        }
     }
 
     @FXML
@@ -121,21 +207,55 @@ public class LoginPageController {
     }
 
     private void loadNextScene(){
-        user.addBillIncome("1", "Кошка лялялялялялялялял", "ООО Мармелад", new Date(), new Date(),
-                Bill.Currency.RUB, 1000 );
-        user.addBillIncome("2", "Собака", "ООО Мармелад", new Date(), new Date(),
-                Bill.Currency.RUB, 2000);
-        user.addBillIncome("3", "Попугай", "ООО Мармелад", new Date(), new Date(),
-                Bill.Currency.RUB, 4000);
-
-        user.addBillOutcome("4", "Стрижка", "ООО Кат-кат", new Date(), new Date(),
-                Bill.Currency.RUB, 600);
-        user.addBillOutcome("5", "Парковка", "ООО Пенек", new Date(), new Date(),
-                Bill.Currency.RUB, 500);
-
-        BillsViewer billsViewer = new BillsViewer(user);
+        sc.connectToServer();
         try {
-            billsViewer.loadScene(stage);
+            Algorithm algorithm = Algorithm.HMAC256("password");
+            String token = JWT.create()
+                    .withClaim("action", "getReceivedBills")
+                    .withClaim("login", user.getPhoneNumber())
+                    .withClaim("password", user.getPassword())
+                    .sign(algorithm);
+
+            sc.wr = new OutputStreamWriter(sc.con.getOutputStream());
+            sc.wr.write(token);
+            sc.wr.flush();
+            sc.wr.close();
+
+            sc.in = new BufferedReader(new InputStreamReader(sc.con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            while ((inputLine = sc.in.readLine()) != null)
+                response.append(inputLine);
+            String[] resp = response.toString().split(" ");
+            DecodedJWT decodedJWT = JWT.decode(resp[0]);
+            String ans = decodedJWT.getClaim("answer").asString();
+            if (ans.equals("success")){
+                int n = decodedJWT.getClaim("number").asInt();
+                for (int i = 1; i <= n; ++i) {
+                    decodedJWT = JWT.decode(resp[i]);
+                    user.addBillIncome(decodedJWT.getClaim("id").asInt(),
+                            decodedJWT.getClaim("description").asString(),
+                            decodedJWT.getClaim("sender").asString(),
+                            /*decodedJWT.getClaim("date_sent").asDate(),        //TODO
+                            decodedJWT.getClaim("date_paid").asDate(),*/
+                            new Date(), new Date(),
+                            Bill.getCurrency(decodedJWT.getClaim("currency").asString()),
+                            decodedJWT.getClaim("sum").asInt());
+                }
+            }
+        }
+        catch(UnsupportedEncodingException e){
+            System.out.println("Encoding beda");
+            System.out.println(e.getMessage());
+        }
+        catch (IOException e){
+            System.out.println("IO beda");
+            System.out.println(e.getMessage());
+        }
+
+        BillsViewer billsViewer = new BillsViewer(user,stage);
+        try {
+            billsViewer.loadScene();
         } catch (Exception e) {
             e.printStackTrace();
         }

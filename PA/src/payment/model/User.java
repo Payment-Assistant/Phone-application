@@ -94,6 +94,10 @@ public class User {
 
     public String getName(){return name;}
 
+    public String getPassword() {
+        return password;
+    }
+
     public void changePhoneNumberValid(){
         if(!isPhoneNumberValid)
             isPhoneNumberValid = true;
@@ -108,7 +112,7 @@ public class User {
         this.email = email;
     }
 
-    public void addBillIncome(String idOfBill,
+    public void addBillIncome(int idOfBill,
                               String description,
                               String nameOfSender,
                               Date dateOfSending,
@@ -124,13 +128,13 @@ public class User {
                                     sum));
     }
 
-    public void addBillOutcome(String idOfBill,
-                              String description,
-                              String nameOfSender,
-                              Date dateOfSending,
-                              Date dateOfPay,
-                              Bill.Currency currency,
-                              int sum){
+    public void addBillOutcome(int idOfBill,
+                               String description,
+                               String nameOfSender,
+                               Date dateOfSending,
+                               Date dateOfPay,
+                               Bill.Currency currency,
+                               int sum){
         billsOutcome.add(0, new Bill(idOfBill,
                 description,
                 nameOfSender,
