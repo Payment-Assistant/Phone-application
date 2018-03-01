@@ -68,7 +68,7 @@ public class NewBillController {
     }
 
     private void createNewBill(){
-        User payUser = new User("8(888)888-88-88", "");   //здесь мы достаем юзера по номеру телефона
+        User payUser = new User("PayUser","8(888)888-88-88", "");   //здесь мы достаем юзера по номеру телефона
         String idOfBill = "1908";       //здесь генерируется id счета по базе данных
         payUser.addBillIncome(idOfBill,
                               descriptionTextArea.getText(),

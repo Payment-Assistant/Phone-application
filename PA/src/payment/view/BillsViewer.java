@@ -119,12 +119,12 @@ public class BillsViewer {
     }
 
     public static void setSumText(Text textSum, int sum){
-        textSum.setText("Общая сумма:\n" + sum + "руб");
+        textSum.setText("Общая сумма:\n" + sum + " RUB");
     }
 
-    public void setIncomeSumText(Text textSum){textSum.setText("Общая сумма:\n" + sumOfIncomeBills + "руб");}
+    public void setIncomeSumText(Text textSum){textSum.setText("Общая сумма:\n" + sumOfIncomeBills + " RUB");}
 
-    public void setOutcomeSumText(Text textSum){textSum.setText("Общая сумма:\n" + sumOfOutcomeBills + "руб");}
+    public void setOutcomeSumText(Text textSum){textSum.setText("Общая сумма:\n" + sumOfOutcomeBills + " RUB");}
 
     public void loadScene(Stage primaryStage) throws Exception{
         billsController = new BillsController();

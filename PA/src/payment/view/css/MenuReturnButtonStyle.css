@@ -1,4 +1,4 @@
-.returnButton{
+.button{
     -fx-background-image: url("../img/returnImg.png");
     -fx-background-position: center center;
     -fx-background-size: contain;
