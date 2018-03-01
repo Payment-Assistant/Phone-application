@@ -68,19 +68,19 @@ public class NewBillController {
     }
 
     private void createNewBill(){
-        User payUser = new User("8(888)888-88-88", "");   //здесь мы достаем юзера по номеру телефона
+        User payUser = new User("PayUser","8(888)888-88-88", "");   //здесь мы достаем юзера по номеру телефона
         String idOfBill = "1908";       //здесь генерируется id счета по базе данных
         payUser.addBillIncome(idOfBill,
                               descriptionTextArea.getText(),
                               user.getPhoneNumber(),
                               new Date(), new Date(),
-                              Bill.Currency.RUBLE,
+                              Bill.Currency.RUB,
                               Integer.parseInt(sumTextField.getText())); //добавить парсинг даты оплаты и всякие проверки
         user.addBillOutcome(idOfBill,
                 descriptionTextArea.getText(),
                 user.getPhoneNumber(),
                 new Date(), new Date(),
-                Bill.Currency.RUBLE,
+                Bill.Currency.RUB,
                 Integer.parseInt(sumTextField.getText()));
         System.out.println("Счет создан");
     }
