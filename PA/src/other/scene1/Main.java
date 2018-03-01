@@ -1,46 +1,33 @@
 package other.scene1;
 
-import common.model.Bill;
+import payment.model.Bill;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import payment.controller.BillsController;
-import payment.model.PaymentUser;
+import payment.model.User;
 import payment.view.BillsViewer;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Main extends Application {
 
-    private static BillsViewer billsViewer;
-    private static PaymentUser user;
-
     @Override
     public void start(Stage primaryStage) throws Exception{
-        user = new PaymentUser("1234", "123456");
-        user.addBill("1", "Кошка", "ООО Мармелад", new Date(), new Date(),
-                Bill.Currency.RUBLE, 1000 );
-        user.addBill("2", "Собака", "ООО Мармелад", new Date(), new Date(),
-                Bill.Currency.RUBLE, 2000);
-        user.addBill("3", "Попугай", "ООО Мармелад", new Date(), new Date(),
-                Bill.Currency.RUBLE, 4000);
+        User user = new User("8(985)617-08-48", "123456");
+        user.addBillIncome("1", "Кошка лялялялялялялялял", "ООО Мармелад", new Date(), new Date(),
+                Bill.Currency.RUB, 1000 );
+        user.addBillIncome("2", "Собака", "ООО Мармелад", new Date(), new Date(),
+                Bill.Currency.RUB, 2000);
+        user.addBillIncome("3", "Попугай", "ООО Мармелад", new Date(), new Date(),
+                Bill.Currency.RUB, 4000);
 
-        billsViewer = new BillsViewer();
-        BillsController billsController = new BillsController();
-        billsController.setBillViewer(billsViewer);
-        billsController.setUser(user);
-        billsController.setStage(primaryStage);
-        billsViewer.setBillsController(billsController);
-        Parent root = FXMLLoader.load(getClass().getResource("../../payment/view/structures/BillsStructure.fxml"));
-        primaryStage.setTitle("My Bills");
-        Scene scene = new Scene(root, 335, 600);
-        scene.getStylesheets().add((getClass().getResource("../../payment/view/css/ButtonsStyle.css")).toExternalForm());
+        user.addBillOutcome("4", "Стрижка", "ООО Кат-кат", new Date(), new Date(),
+                Bill.Currency.RUB, 600);
+        user.addBillOutcome("5", "Парковка", "ООО Пенек", new Date(), new Date(),
+                Bill.Currency.RUB, 500);
 
-        primaryStage.setScene(scene);
-        primaryStage.show();
+
+        BillsViewer billsViewer = new BillsViewer(user);
+        billsViewer.loadScene(primaryStage);
     }
 
 
@@ -48,11 +35,4 @@ public class Main extends Application {
         launch(args);
     }
 
-    public static BillsViewer getBillsViewer(){
-        return billsViewer;
-    }
-
-    public static PaymentUser getUser(){
-        return user;
-    }
 }

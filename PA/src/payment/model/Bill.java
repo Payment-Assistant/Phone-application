@@ -1,4 +1,4 @@
-package common.model;
+package payment.model;
 
 import java.util.Date;
 
@@ -8,17 +8,18 @@ import java.util.Date;
 public class Bill {
 
     private String idOfBill;        //идентификатор счета
-    private String description;     //описание счета
+    private String description;     //описание счета (не больше 25 символов)
     private String nameOfSender;    //имя выставителя счета
     private Date dateOfSending;     //дата выставления
     private Date dateOfPay;         //дата оплаты
     private Currency currency;      //валюта
     private int sum;                //сумма
     private boolean isPaid;         //флаг выплачен/не выплачен (default false)
+    private String other;           // поле для дополнительной инфы (JSON), чтобы потом было удобнее добавлять новые данные в бд
 
     public enum Currency{
 
-        RUBLE("руб."), DOLLAR("дол"), EURO("евро");
+        RUB("RUB"), USD("USD"), EUR("EUR");
         private String symbol;
 
         private Currency(String symbol){
@@ -75,7 +76,7 @@ public class Bill {
         return sum;
     }
 
-    public boolean getPaid(){
+    public boolean getStatus(){
         return isPaid;
     }
 

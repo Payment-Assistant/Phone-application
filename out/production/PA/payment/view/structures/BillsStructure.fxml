@@ -25,7 +25,7 @@
                   <Insets />
                </GridPane.margin>
         </Button>
-        <Text font="$x2" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Times New Roman; -fx-fill: #444; -fx-font-weight: bold;" text="Счета" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+        <Text font="$x2" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Times New Roman; -fx-fill: #ffffff; -fx-font-weight: bold;" text="Счета" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
         <Text fx:id="textSum" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Times New Roman; -fx-fill: #ffffff; -fx-font-weight: bold;" text="Общая сумма:&#10;1000 руб." GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
           <font>
             <Font size="14.0" />

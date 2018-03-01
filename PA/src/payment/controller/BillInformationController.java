@@ -9,9 +9,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import payment.model.User;
 import payment.view.BillInformationAndPayViewer;
+import payment.view.BillInformationViewer;
 import payment.view.BillsViewer;
 
-public class BillInformationAndPayController {
+public class BillInformationController {
 
     @FXML
     private Label sumUpperLabel;
@@ -29,6 +30,9 @@ public class BillInformationAndPayController {
     private Label sumLabel;
 
     @FXML
+    private Label statusLabel;
+
+    @FXML
     private GridPane menuPane;
 
     @FXML
@@ -37,19 +41,13 @@ public class BillInformationAndPayController {
     @FXML
     private Button menuReturnButton;
 
-    @FXML
-    private Button payButton;
-
-    @FXML
-    private Button payAndMessageButton;
-
-    private static BillInformationAndPayViewer viewer;
+    private static BillInformationViewer viewer;
     private static User user;
     private static Stage stage;
 
     @FXML
     void initialize() throws Exception{
-        viewer.pullInformation(senderLabel, descriptionLabel, dateLabel, sumLabel, sumUpperLabel);
+        viewer.pullInformation(senderLabel, descriptionLabel, dateLabel, sumLabel, sumUpperLabel, statusLabel);
 
         menuPane.setTranslateX(-200);
         TranslateTransition menuMoving = new TranslateTransition(Duration.millis(300), menuPane);
@@ -67,7 +65,7 @@ public class BillInformationAndPayController {
         });
     }
 
-    public static void setViewer(BillInformationAndPayViewer newViewer){
+    public static void setViewer(BillInformationViewer newViewer){
         viewer = newViewer;
     }
 
@@ -83,4 +81,5 @@ public class BillInformationAndPayController {
             System.out.println(e.getMessage());
         }
     }
+
 }

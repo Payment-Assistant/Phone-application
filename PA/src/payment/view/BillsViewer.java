@@ -1,132 +1,143 @@
 package payment.view;
 
-import common.model.Bill;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import payment.model.Bill;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import payment.controller.BillsController;
-import payment.model.PaymentUser;
-
-import java.util.ArrayDeque;
-import java.util.Queue;
+import payment.model.User;
 
 public class BillsViewer {
 
-    private PaymentUser user;        //пользователь данного кабинета
-    private  Queue<Bill> bills;       //очередь для выдачи счетов пользователя
-    private boolean flag = false;    //флаг для отрисовки кнопок счетов
-    private BillsController billsController;
+    private User user;
+    private static BillsController billsController;
+    private int sumOfIncomeBills;
+    private int sumOfOutcomeBills;
 
-    class BillLine extends ListCell<String> {
-        Bill bill;
-        HBox hbox = new HBox();
-        Label label = new Label("empty");
-        Pane pane = new Pane();
-        Button button = new Button();
-        String lastItem;
+    public BillsViewer(User user) {
+        this.user = user;
+    }
 
-        private BillLine(Bill bill){
-            super();
-            if(bill != null){
-                this.bill = bill;
-                button.setText(bill.getSum() + bill.getCurrency().getSymbol());
-            }
-            button.setFont(Font.font(15));
-            hbox.getChildren().addAll(label, pane, button);
+    public static class HBoxBill extends HBox {
+
+        private Bill bill;
+        private CheckBox checkBox;
+        private Label label;
+
+        HBoxBill(Bill bill) {
+            this.bill = bill;
+            Pane pane = new Pane();
+
+            checkBox = new CheckBox();
+            checkBox.getStylesheets().add((getClass().getResource("css/CheckBoxStyle.css")).toExternalForm());
+
+            label = new Label(checkDescriptionLength(bill.getDescription()));
+            label.setFont(Font.font(20));
+
+            super.setAlignment(Pos.CENTER);
+            super.getChildren().addAll(label, pane);
+
             HBox.setHgrow(pane, Priority.ALWAYS);
-            label.setFont(Font.font(18));
 
-            button.setFont(Font.font(15));
-            button.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    try {
-                        billsController.onButtonPayClick(event, bill);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            setOnMouseClicked(evt -> {
+                try {
+                    billsController.onHBoxClick(this, bill);
+                } catch (Exception e) {
+                    System.out.println(e.getStackTrace());
                 }
             });
         }
 
-        private BillLine() {
-            super();
-            hbox.getChildren().addAll(label, pane, button);
-            HBox.setHgrow(pane, Priority.ALWAYS);
-            label.setFont(Font.font(18));
-            button.setText("-");
-            button.setFont(Font.font(15));
-            button.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    try {
-                        billsController.onButtonPayClick(event, null);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+        public CheckBox getCheckBox() {
+            return checkBox;
         }
 
-        @Override
-        protected void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty);
-            setText(null);
-            if (empty) {
-                lastItem = null;
-                setGraphic(null);
-            } else {
-                lastItem = item;
-                label.setText(item != null ? item : "<null>");
-                setGraphic(hbox);
+        public Bill getBill(){
+            return bill;
+        }
+
+        private String checkDescriptionLength(String description) {
+            if (description.length() > 21) {
+                description = description.substring(0, 18) + "...";
             }
+            return description;
         }
     }
 
-    public void loadData(ObservableList<String> list, ListView<String> listView, Text textSum) throws Exception{
-        list.removeAll();
-        int sum = 0;
-        for (Bill b: user.getBills()) {
-            list.add(b.getDescription());
-            sum += b.getSum();
+    public static class HBoxIncomeBill extends HBoxBill{
+
+        HBoxIncomeBill(Bill bill){
+            super(bill);
+            Button button = new Button(String.valueOf(bill.getSum()) + " " + bill.getCurrency().getSymbol());
+            button.getStylesheets().add(getClass().getResource("css/ButtonsStyle.css").toExternalForm());
+            getChildren().add(2, button);
         }
-        setSumText(textSum, sum);
-        listView.setCellFactory(param -> {
-            if(!bills.isEmpty() && flag) {
-                Bill bill = bills.poll();
-                return new BillLine(bill);
-            }
-            else{
-                flag = true;
-                return new BillLine();
-            }
-        });
 
-
-        listView.getItems().addAll(list);
     }
 
-    private static void setSumText(Text textSum, int sum){
+    public static class HBoxOutcomeBill extends HBoxBill{
+
+        HBoxOutcomeBill(Bill bill){
+            super(bill);
+            Label label = new Label(String.valueOf(bill.getSum()) + " " + bill.getCurrency().getSymbol());
+            label.setFont(Font.font(15));
+            getChildren().add(2, label);
+        }
+
+    }
+
+    public void loadData(ListView<HBoxBill> listViewIncome, ListView<HBoxBill> listViewOutCome, Text textSum, User user) throws Exception{
+        loadIncomeData(listViewIncome, textSum, user);
+        loadOutcomeData(listViewOutCome, textSum, user);
+        setIncomeSumText(textSum);
+    }
+
+    private void loadIncomeData(ListView<HBoxBill> listView, Text textSum, User user) throws Exception{
+        listView.setFixedCellSize(45);
+        for (Bill b:
+                user.getBillsIncome()) {
+            listView.getItems().add(new HBoxIncomeBill(b));
+            sumOfIncomeBills += b.getSum();
+        }
+    }
+
+    private void loadOutcomeData(ListView<HBoxBill> listView, Text textSum, User user) throws Exception{
+        listView.setFixedCellSize(45);
+        for (Bill b:
+                user.getBillsOutcome()) {
+            listView.getItems().add(new HBoxOutcomeBill(b));
+            sumOfOutcomeBills += b.getSum();
+        }
+    }
+
+    public static void setSumText(Text textSum, int sum){
         textSum.setText("Общая сумма:\n" + sum + "руб");
     }
 
-    public void setBillsController(BillsController billsController){
-        this.billsController = billsController;
-    }
+    public void setIncomeSumText(Text textSum){textSum.setText("Общая сумма:\n" + sumOfIncomeBills + "руб");}
 
-    public void setBills(PaymentUser newUser){
-        user = newUser;
-        bills = new ArrayDeque<>();
-        bills.addAll(newUser.getBills());
+    public void setOutcomeSumText(Text textSum){textSum.setText("Общая сумма:\n" + sumOfOutcomeBills + "руб");}
+
+    public void loadScene(Stage primaryStage) throws Exception{
+        billsController = new BillsController();
+        billsController.setBillViewer(this);
+        billsController.setUser(user);
+        BillsController.setStage(primaryStage);
+        Parent root = FXMLLoader.load(getClass().getResource("structures/BillsStructure.fxml"));
+        primaryStage.setTitle("My Bills");
+
+        Scene scene = new Scene(root, 335, 600);
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
 }
