@@ -1,5 +1,9 @@
 package payment.view;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import payment.controller.ServerConnection;
 import payment.model.Bill;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -16,6 +20,11 @@ import payment.controller.BillsController;
 import payment.model.User;
 import sun.font.StandardGlyphVector;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Date;
+
 public class BillsViewer {
 
     private User user;
@@ -23,10 +32,12 @@ public class BillsViewer {
     private static BillsController billsController;
     private int sumOfIncomeBills;
     private int sumOfOutcomeBills;
+    private ServerConnection sc;
 
     public BillsViewer(User user, Stage stage) {
         this.user = user;
         this.stage = stage;
+        sc = new ServerConnection();
     }
 
     public static class HBoxBill extends HBox {
@@ -117,19 +128,82 @@ public class BillsViewer {
 
     private void loadIncomeData(ListView<HBoxBill> listView, Text textSum, User user) throws Exception{
         listView.setFixedCellSize(45);
-        for (Bill b:
-                user.getBillsIncome()) {
-            listView.getItems().add(new HBoxIncomeBill(user, b, stage));
-            sumOfIncomeBills += b.getSum();
+
+        sc.connectToServer();
+        Algorithm algorithm = Algorithm.HMAC256("password");
+        String token = JWT.create()
+                .withClaim("action","getReceivedBills")
+                .withClaim("login", user.getPhoneNumber())
+                .withClaim("password",user.getPassword())
+                .sign(algorithm);
+        sc.wr = new OutputStreamWriter(sc.con.getOutputStream());
+        sc.wr.write(token);
+        sc.wr.flush();
+        sc.wr.close();
+
+        sc.in = new BufferedReader(new InputStreamReader(sc.con.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        while ((inputLine = sc.in.readLine()) != null)
+            response.append(inputLine);
+        String[] re = response.toString().split(" ");
+        DecodedJWT decodedJWT = JWT.decode(re[0]);
+        String ans = decodedJWT.getClaim("answer").asString();
+        if (ans.equals("success")) {
+            int n = decodedJWT.getClaim("number").asInt();
+            for (int i = 1; i <= n; ++i) {
+                decodedJWT = JWT.decode(re[i]);
+                Bill b = new Bill(decodedJWT.getClaim("id").asInt(),
+                        decodedJWT.getClaim("description").asString(),
+                        decodedJWT.getClaim("sender").asString(),
+                        /*decodedJWT.getClaim("date_sent").asDate(),                //TODO
+                        decodedJWT.getClaim("date_paid").asDate(),*/
+                        new Date(), new Date(),
+                        Bill.getCurrency(decodedJWT.getClaim("currency").asString()),
+                        decodedJWT.getClaim("sum").asInt());
+                listView.getItems().add(new HBoxIncomeBill(user, b, stage));
+                sumOfIncomeBills += b.getSum();
+            }
         }
     }
 
     private void loadOutcomeData(ListView<HBoxBill> listView, Text textSum, User user) throws Exception{
         listView.setFixedCellSize(45);
-        for (Bill b:
-                user.getBillsOutcome()) {
-            listView.getItems().add(new HBoxOutcomeBill(user, b, stage));
-            sumOfOutcomeBills += b.getSum();
+        sc.connectToServer();
+        Algorithm algorithm = Algorithm.HMAC256("password");
+        String token = JWT.create()
+                .withClaim("action","getSentBills")
+                .withClaim("login", user.getPhoneNumber())
+                .withClaim("password",user.getPassword())
+                .sign(algorithm);
+        sc.wr = new OutputStreamWriter(sc.con.getOutputStream());
+        sc.wr.write(token);
+        sc.wr.flush();
+        sc.wr.close();
+
+        sc.in = new BufferedReader(new InputStreamReader(sc.con.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        while ((inputLine = sc.in.readLine()) != null)
+            response.append(inputLine);
+        String[] re = response.toString().split(" ");
+        DecodedJWT decodedJWT = JWT.decode(re[0]);
+        String ans = decodedJWT.getClaim("answer").asString();
+        if (ans.equals("success")) {
+            int n = decodedJWT.getClaim("number").asInt();
+            for (int i = 1; i <= n; ++i) {
+                decodedJWT = JWT.decode(re[i]);
+                Bill b = new Bill(decodedJWT.getClaim("id").asInt(),
+                        decodedJWT.getClaim("description").asString(),
+                        decodedJWT.getClaim("sender").asString(),
+                        /*decodedJWT.getClaim("date_sent").asDate(),                //TODO
+                        decodedJWT.getClaim("date_paid").asDate(),*/
+                        new Date(), new Date(),
+                        Bill.getCurrency(decodedJWT.getClaim("currency").asString()),
+                        decodedJWT.getClaim("sum").asInt());
+                listView.getItems().add(new HBoxIncomeBill(user, b, stage));
+                sumOfIncomeBills += b.getSum();
+            }
         }
     }
 

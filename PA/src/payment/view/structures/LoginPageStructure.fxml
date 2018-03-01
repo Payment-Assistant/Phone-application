@@ -8,6 +8,8 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -48,23 +50,22 @@
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                            </columnConstraints>
                            <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="8.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" percentHeight="40.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" percentHeight="6.0" prefHeight="8.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="8.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" percentHeight="6.0" prefHeight="8.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="5.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <Hyperlink layoutX="135.0" layoutY="305.0" text="Забыли пароль?" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="8" GridPane.valignment="BASELINE" />
-                              <TextField fx:id="NumberEnterText" layoutX="101.0" layoutY="136.0" prefHeight="31.0" prefWidth="177.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                              <TextField fx:id="PassEnterText" layoutX="102.0" layoutY="209.0" prefHeight="29.0" prefWidth="177.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
-                              <Label layoutX="102.0" layoutY="104.0" text="Номер телефона" textFill="#d3cfcf" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+                              <Hyperlink layoutX="135.0" layoutY="305.0" text="Забыли пароль?" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="BASELINE" />
+                              <TextField fx:id="NumberEnterText" layoutX="101.0" layoutY="136.0" prefHeight="31.0" prefWidth="177.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                              <PasswordField fx:id="PassEnterText" layoutX="102.0" layoutY="209.0" prefHeight="29.0" prefWidth="177.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                              <Label layoutX="102.0" layoutY="104.0" text="Номер телефона" textFill="#d3cfcf" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -72,13 +73,18 @@
                                     <Insets top="10.0" />
                                  </GridPane.margin>
                               </Label>
-                              <Label layoutX="102.0" layoutY="182.0" text="Пароль" textFill="#cdcdcd" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="BOTTOM">
+                              <Label layoutX="102.0" layoutY="182.0" text="Пароль" textFill="#cdcdcd" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="BOTTOM">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                               <Label fx:id="errorMessageL" textAlignment="CENTER" textFill="#f80505" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                              <Button layoutX="134.0" layoutY="278.0" text="Начать работу!" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7" onMouseClicked="#handleLoginButton"/>
+                               <Label fx:id="errorMessageL" textAlignment="CENTER" textFill="#f80505" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <Button layoutX="134.0" layoutY="278.0" onMouseClicked="#handleLoginButton" text="Начать работу!" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+                              <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                 <image>
+                                    <Image url="@../img/logoPageLogoImg.png" />
+                                 </image>
+                              </ImageView>
                            </children>
                         </GridPane>
                   </content>

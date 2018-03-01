@@ -6,6 +6,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -52,7 +53,7 @@ public class LoginPageController {
     @FXML
     public Label errorMessageL;
     @FXML
-    public TextField PassEnterText;
+    public PasswordField PassEnterText;
     @FXML
     public TextField NumberEnterText;
     @FXML
