@@ -16,7 +16,7 @@
   <children>
     <GridPane prefHeight="232.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
-            <Pane accessibleRole="IMAGE_VIEW" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #10cc00;" GridPane.columnSpan="3" />
+            <Pane accessibleRole="IMAGE_VIEW" prefHeight="200.0" prefWidth="200.0" styleClass="topPane" stylesheets="@../css/ButtonsStyle.css" GridPane.columnSpan="3" />
         <Button fx:id="menuButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="34.0" prefWidth="160.0" stylesheets="@../css/ButtonsStyle.css" text="Меню" wrapText="false" GridPane.columnIndex="0" GridPane.rowIndex="0">
           <font>
             <Font size="20.0" fx:id="x2" />
@@ -26,7 +26,7 @@
                </GridPane.margin>
         </Button>
         <Text font="$x2" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Times New Roman; -fx-fill: #444; -fx-font-weight: bold;" text="Счета" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
-        <Text fx:id="textSum" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Times New Roman; -fx-fill: #444; -fx-font-weight: bold;" text="Общая сумма:&#10;1000 руб." GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+        <Text fx:id="textSum" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Times New Roman; -fx-fill: #ffffff; -fx-font-weight: bold;" text="Общая сумма:&#10;1000 руб." GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
           <font>
             <Font size="14.0" />
           </font>
@@ -86,8 +86,8 @@
             <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Pane accessibleRole="IMAGE_VIEW" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #10cc00;" GridPane.rowIndex="5" />
-            <Pane accessibleRole="IMAGE_VIEW" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #10cc00;" />
+            <Pane accessibleRole="IMAGE_VIEW" prefHeight="200.0" prefWidth="200.0" styleClass="panes" stylesheets="@../css/ButtonsStyle.css" GridPane.rowIndex="5" />
+            <Pane accessibleRole="IMAGE_VIEW" prefHeight="200.0" prefWidth="200.0" styleClass="panes" stylesheets="@../css/ButtonsStyle.css" />
             <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="34.0" prefWidth="160.0" stylesheets="@../css/ButtonsStyle.css" text="Счета" wrapText="false" GridPane.rowIndex="1">
                <font>
                   <Font size="20.0" fx:id="x21" />

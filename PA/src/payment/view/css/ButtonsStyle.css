@@ -1,7 +1,7 @@
 .button{
     -fx-background-color:
-            linear-gradient(#f0ff35, #a9ff00),
-            radial-gradient(center 50% -40%, radius 200%, #b8ee36 45%, #80c800 50%);
+            linear-gradient(#e8f4f8, #86c5da),
+            radial-gradient(center 50% -40%, radius 200%, #c1e1ec 45%, #add8e6 50%);
     -fx-background-radius: 6, 5;
     -fx-background-insets: 0, 1;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
@@ -11,10 +11,16 @@
 
 .newBillButton{
     -fx-background-color:
-            linear-gradient(#f0ff35, #a9ff00),
-            radial-gradient(center 50% 120%, radius 200%, #80c800 45%, #b8ee36 50%);
+            linear-gradient(#e8f4f8, #86c5da),
+            radial-gradient(center 50% -40%, radius 200%, #c1e1ec 45%, #add8e6 50%);
     -fx-background-image: url("../img/newBillImg.png");
     -fx-background-position: center;
     -fx-background-size: 50px;
     -fx-background-repeat: no-repeat;
+}
+.panes{
+    -fx-background-color: #e8f4f8;
+}
+.topPane{
+    -fx-background-color:  #07283D;
 }
