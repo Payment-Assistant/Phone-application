@@ -1,0 +1,26 @@
+.button{
+    -fx-background-color:
+            linear-gradient(#e8f4f8, #86c5da),
+            radial-gradient(center 50% -40%, radius 200%, #c1e1ec 45%, #add8e6 50%);
+    -fx-background-radius: 6, 5;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
+    -fx-text-fill: #395306;
+    -fx-font-size: 15px;
+}
+
+.newBillButton{
+    -fx-background-color:
+            linear-gradient(#e8f4f8, #86c5da),
+            radial-gradient(center 50% -40%, radius 200%, #c1e1ec 45%, #add8e6 50%);
+    -fx-background-image: url("../img/newBillImg.png");
+    -fx-background-position: center;
+    -fx-background-size: 50px;
+    -fx-background-repeat: no-repeat;
+}
+.panes{
+    -fx-background-color: #e8f4f8;
+}
+.topPane{
+    -fx-background-color:  #07283D;
+}
