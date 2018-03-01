@@ -156,9 +156,9 @@ public class BillsViewer {
                 Bill b = new Bill(decodedJWT.getClaim("id").asInt(),
                         decodedJWT.getClaim("description").asString(),
                         decodedJWT.getClaim("sender").asString(),
-                        /*decodedJWT.getClaim("date_sent").asDate(),                //TODO
+                       /* decodedJWT.getClaim("date_sent").asDate(),                //TODO
                         decodedJWT.getClaim("date_paid").asDate(),*/
-                        new Date(), new Date(),
+                       new Date(), new Date(),
                         Bill.getCurrency(decodedJWT.getClaim("currency").asString()),
                         decodedJWT.getClaim("sum").asInt());
                 listView.getItems().add(new HBoxIncomeBill(user, b, stage));
@@ -201,8 +201,8 @@ public class BillsViewer {
                         new Date(), new Date(),
                         Bill.getCurrency(decodedJWT.getClaim("currency").asString()),
                         decodedJWT.getClaim("sum").asInt());
-                listView.getItems().add(new HBoxIncomeBill(user, b, stage));
-                sumOfIncomeBills += b.getSum();
+                listView.getItems().add(new HBoxOutcomeBill(user, b, stage));
+                sumOfOutcomeBills += b.getSum();
             }
         }
     }

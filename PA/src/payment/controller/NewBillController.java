@@ -134,9 +134,8 @@ public class NewBillController {
                         user.addBillOutcome(decodedJWT.getClaim("id").asInt(),
                                 decodedJWT.getClaim("description").asString(),
                                 decodedJWT.getClaim("sender").asString(),
-                                /*decodedJWT.getClaim("date_sent").asDate(),                //TODO
-                                decodedJWT.getClaim("date_paid").asDate(),*/
-                                new Date(), new Date(),
+                                decodedJWT.getClaim("date_sent").asDate(),                //TODO
+                                decodedJWT.getClaim("date_paid").asDate(),
                                 Bill.getCurrency(decodedJWT.getClaim("currency").asString()),
                                 decodedJWT.getClaim("sum").asInt());
                     }
