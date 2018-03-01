@@ -82,7 +82,7 @@ public class User {
                                     nameOfSender,
                                     dateOfSending,
                                     dateOfPay,
-                                    Bill.Currency.RUB,
+                                    Bill.Currency.RUBLE,
                                     sum));
     }
 
@@ -98,7 +98,7 @@ public class User {
                 nameOfSender,
                 dateOfSending,
                 dateOfPay,
-                Bill.Currency.RUB,
+                Bill.Currency.RUBLE,
                 sum));
     }
 

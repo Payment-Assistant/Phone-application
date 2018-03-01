@@ -74,13 +74,13 @@ public class NewBillController {
                               descriptionTextArea.getText(),
                               user.getPhoneNumber(),
                               new Date(), new Date(),
-                              Bill.Currency.RUB,
+                              Bill.Currency.RUBLE,
                               Integer.parseInt(sumTextField.getText())); //добавить парсинг даты оплаты и всякие проверки
         user.addBillOutcome(idOfBill,
                 descriptionTextArea.getText(),
                 user.getPhoneNumber(),
                 new Date(), new Date(),
-                Bill.Currency.RUB,
+                Bill.Currency.RUBLE,
                 Integer.parseInt(sumTextField.getText()));
         System.out.println("Счет создан");
     }
