@@ -85,6 +85,10 @@ public class Bill {
             isPaid = true;
     }
 
+    public boolean isPaid(){
+        return isPaid;
+    }
+
     public String getMessage(){
         StringBuilder builder = new StringBuilder();
         builder.append("Здравствуйте!\n\n");

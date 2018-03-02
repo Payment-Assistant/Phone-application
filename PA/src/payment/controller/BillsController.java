@@ -209,6 +209,15 @@ public class BillsController {
         }
     }
 
+    public void onExitButtonClick() {
+        LoginPageController.setStage(stage);
+        try {
+            new LoginPageViewer().loadScene(stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setUser(User newUser){
         user = newUser;
     }

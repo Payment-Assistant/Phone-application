@@ -76,6 +76,7 @@ public class LoginPageController {
     @FXML
     protected void handleRegistrationButton(MouseEvent event) {
 
+        sc.connectToServer();
         if (validateName(name.getText())
                 && validatePhoneNumber(phoneNumber.getText())
                 && (validatePassword(password.getText()))
@@ -94,14 +95,14 @@ public class LoginPageController {
                         .withClaim("email",email.getText())
                         .sign(algorithm);
 
-                sc.wr = new OutputStreamWriter(sc.con.getOutputStream());
-                sc.wr.write(token);
-                sc.wr.flush();
-                sc.wr.close();
+                OutputStreamWriter wr = new OutputStreamWriter(sc.con.getOutputStream());
+                wr.write(token);
+                wr.flush();
+                wr.close();
 
-                sc.in = new BufferedReader(new InputStreamReader(sc.con.getInputStream()));
-                String resp = sc.in.readLine();
-                sc.in.close();
+                BufferedReader in = new BufferedReader(new InputStreamReader(sc.con.getInputStream()));
+                String resp = in.readLine();
+                in.close();
                 DecodedJWT decodedJWT = JWT.decode(resp);
                 String ans = decodedJWT.getClaim("answer").asString();
                 if (ans.equals("success"))

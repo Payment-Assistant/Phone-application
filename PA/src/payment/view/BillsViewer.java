@@ -105,6 +105,9 @@ public class BillsViewer {
                     e1.printStackTrace();
                 }
             });
+            if(bill.isPaid()){
+                button.setText("Оплачен");
+            }
         }
 
     }
@@ -141,6 +144,7 @@ public class BillsViewer {
         sc.wr.flush();
         sc.wr.close();
 
+        //если счет оплачен, то вывести другую кнопку
         sc.in = new BufferedReader(new InputStreamReader(sc.con.getInputStream()));
         String inputLine;
         StringBuffer response = new StringBuffer();
@@ -161,6 +165,9 @@ public class BillsViewer {
                        new Date(), new Date(),
                         Bill.getCurrency(decodedJWT.getClaim("currency").asString()),
                         decodedJWT.getClaim("sum").asInt());
+                boolean paid = decodedJWT.getClaim("isPaid").asBoolean();
+                if (paid)
+                    b.changePaid();
                 listView.getItems().add(new HBoxIncomeBill(user, b, stage));
                 sumOfIncomeBills += b.getSum();
             }

@@ -1,5 +1,8 @@
 package payment.controller;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -10,6 +13,11 @@ import payment.model.User;
 import payment.view.BillsViewer;
 import payment.view.CardInformationViewer;
 import payment.view.NewBillViewer;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.time.LocalDate;
 
 public class CardInformationController {
 
@@ -70,7 +78,8 @@ public class CardInformationController {
         }
     }
 
-    public void onPayButtonClick(){
+    ServerConnection sc = new ServerConnection();
+    public void onPayButtonClick() {
         String pack = new StringBuilder(20)
                 .append(numberCard1.getText())
                 .append(numberCard2.getText())
@@ -86,10 +95,37 @@ public class CardInformationController {
                 .append(cvvText.getText())
                 .toString();
         int result = BankEmulator.payBill(bill, pack);
-        if(result == 1){
+        if (result == 1) {
             resultLabel.setVisible(true);
+            //bill.changePaid();
         }
+        sc.connectToServer();
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("password");
+            String token = JWT.create()
+                    .withClaim("action", "makePaid")
+                    .withClaim("login", user.getPhoneNumber()) //login == sender
+                    .withClaim("password", user.getPassword())
+                    .withClaim("billId", bill.getIdOfBill())
+                    .sign(algorithm);
+            sc.wr = new OutputStreamWriter(sc.con.getOutputStream());
+            sc.wr.write(token);
+            sc.wr.flush();
+            sc.wr.close();
 
+            sc.in = new BufferedReader(new InputStreamReader(sc.con.getInputStream()));
+            String resp = sc.in.readLine();
+            sc.in.close();
+            DecodedJWT decodedJWT = JWT.decode(resp);
+            String ans = decodedJWT.getClaim("answer").asString();
+            if (ans.equals("success"))
+                System.out.println("Счет оплачен");
+            else
+                System.out.println("Not paid");
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public void setUser(User newUser){user = newUser;}

@@ -48,41 +48,56 @@ public class NewBillController {
     private static Stage stage;
 
     @FXML
-    void initialize() throws Exception{
+    void initialize() throws Exception {
+        Message.setVisible(false);
         menuPane.setTranslateX(-200);
         TranslateTransition menuMoving = new TranslateTransition(Duration.millis(300), menuPane);
         menuMoving.setFromX(-200);
         menuMoving.setToX(0);
 
-        menuButton.setOnMouseClicked(evt ->{
+        menuButton.setOnMouseClicked(evt -> {
             menuMoving.setRate(1);
             menuMoving.play();
         });
 
-        menuReturnButton.setOnMouseClicked(evt ->{
+        menuReturnButton.setOnMouseClicked(evt -> {
             menuMoving.setRate(-1);
             menuMoving.play();
         });
     }
 
     @FXML
-    private void onReturnButtonClick(){
+    private void onReturnButtonClick() {
         try {
             new BillsViewer(user, stage).loadScene();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
     @FXML
-    private void onToSendBillButtonClick(){
-        createNewBill();
+    private void onToSendBillButtonClick() {
+        boolean flag = createNewBill();
+        if (flag) {
+            try {
+                Message.setVisible(true);
+                Thread.sleep(2000);
+                new BillsViewer(user, stage).loadScene();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Message.setText("Неверный логин получателя");
+            Message.setTextFill(Color.RED);
+            Message.setVisible(true);
+        }
+
     }
 
     double sum;
     ServerConnection sc = new ServerConnection();
-    private void createNewBill(){
+
+    private boolean createNewBill() {
 
         sc.connectToServer();
         try {
@@ -108,12 +123,11 @@ public class NewBillController {
             DecodedJWT decodedJWT = JWT.decode(resp);
             String ans = decodedJWT.getClaim("answer").asString();
             if (ans.equals("success")) {
-                Message.setText("Счет отправлен!");
                 sc.connectToServer();
                 token = JWT.create()
-                        .withClaim("action","getSentBills")
+                        .withClaim("action", "getSentBills")
                         .withClaim("login", user.getPhoneNumber())
-                        .withClaim("password",user.getPassword())
+                        .withClaim("password", user.getPassword())
                         .sign(algorithm);
                 sc.wr = new OutputStreamWriter(sc.con.getOutputStream());
                 sc.wr.write(token);
@@ -139,29 +153,19 @@ public class NewBillController {
                                 Bill.getCurrency(decodedJWT.getClaim("currency").asString()),
                                 decodedJWT.getClaim("sum").asInt());
                     }
-                }
-                try{
-                    Thread.sleep(5000);
-                    new BillsViewer(user, stage).loadScene();
-                }
-                catch(Exception e){
-                    System.out.println(e.getMessage());
+                    return true;
                 }
             }
             if (ans.equals("unknownLogin")) {
-                Message.setText("Неверный логин получателя");
-                Message.setTextFill(Color.RED);
+                return false;
             }
-        }
-        catch(UnsupportedEncodingException e){
+        } catch (UnsupportedEncodingException e) {
             System.out.println("Беда");
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("IO beda");
         }
+        return false;
     }
-
-
 
     public void onSettingsButtonClick(){
         try {

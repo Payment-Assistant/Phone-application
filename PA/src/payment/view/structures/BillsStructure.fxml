@@ -108,7 +108,7 @@
                   <Font size="20.0" fx:id="x213" />
                </font>
             </Button>
-            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="34.0" prefWidth="160.0" stylesheets="@../css/ButtonsStyle.css" text="Выход" wrapText="false" GridPane.rowIndex="6">
+            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="34.0" prefWidth="160.0" stylesheets="@../css/ButtonsStyle.css" text="Выход" wrapText="false" GridPane.rowIndex="6" onMouseClicked="#onExitButtonClick">
                <font>
                   <Font size="20.0" fx:id="x215" />
                </font>
